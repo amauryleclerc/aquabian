@@ -1,7 +1,6 @@
 group 'fr.aquabian'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
 buildscript {
     ext {
         springBootVersion = '2.0.1.RELEASE'
@@ -15,17 +14,15 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
-}
 
-jar {
-    from {
-        (configurations.runtime).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    manifest {
-        attributes 'Main-Class': 'fr.aquabian.Main'
-    }
+
+
+}
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+ext {
+    springBootVersion = '2.0.1.RELEASE'
 }
 
 sourceCompatibility = 1.8
@@ -36,6 +33,16 @@ repositories {
 dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.12'
+    compile("org.springframework.boot:spring-boot-starter-web")
 
+}
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+}
+springBoot {
+    mainClassName = 'fr.aquabian.Main'
 }
