@@ -1,0 +1,41 @@
+group 'fr.aquabian'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+jar {
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes 'Main-Class': 'fr.aquabian.Main'
+    }
+}
+
+sourceCompatibility = 1.8
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.12'
+
+
+}
