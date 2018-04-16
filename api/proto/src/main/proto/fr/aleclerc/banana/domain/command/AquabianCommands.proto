@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package domain.command;
+
+option java_package = "com.aquabian.api.domain.command";
+import "google/protobuf/timestamp.proto";
+
+message AquabianCommand {
+    oneof command {
+        CreateDeviceCommand createDeviceCommand =1;
+        AddSensorToDeviceCommand AddSensorToDeviceCommand =2;
+        CreateSensorCommand CreateSensorCommand =3;
+        AddMeasureCommand AddMeasureCommand =4;
+    }
+}
+
+//Device command
+message CreateDeviceCommand {
+    string id = 1;
+    string name = 2;
+    repeated string sensors = 3;
+}
+
+message AddSensorToDeviceCommand {
+    string id = 1;
+    string idSensor = 2;
+}
+
+//Sensor command
+message CreateSensorCommand {
+    string id = 1;
+    string name = 2;
+    string device = 3;
+}
+
+message AddMeasureCommand {
+    string id = 1;
+    double value = 2;
+    google.protobuf.Timestamp date = 3;
+}
+
+
+

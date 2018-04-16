@@ -1,0 +1,9 @@
+
+dependencies {
+    compile project(':api/java')
+    compile project(':toolkit')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+    compile group: 'org.springframework', name: 'spring-web'
+
+
+}

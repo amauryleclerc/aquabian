@@ -1,2 +1,7 @@
 rootProject.name = 'aquabian'
-
+include 'toolkit'
+include 'api/proto'
+include 'api/java'
+include 'master'
+include 'slave'
+include 'ui'

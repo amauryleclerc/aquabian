@@ -1,0 +1,13 @@
+
+plugins {
+    id "java"
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':api/proto')
+    compile "io.reactivex.rxjava2:rxjava"
+
+}

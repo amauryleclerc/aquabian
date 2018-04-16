@@ -1,0 +1,12 @@
+dependencies {
+    compile project(':api/java')
+    compile('org.axonframework:axon-core')
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile('org.axonframework:axon-spring-boot-starter')
+    compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.h2database:h2")
+    compileOnly("org.projectlombok:lombok")
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+
+}

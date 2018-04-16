@@ -1,0 +1,21 @@
+
+apply plugin:"com.moowork.node"
+
+task copyFiles(type: Copy) {
+  from '../api/proto/build/generated/source/proto/main/js'
+  into 'frontend/src/assets/js'
+}
+
+node{
+  version = '8.10.0'
+  npmVersion = '5.8.0'
+  download = true
+  nodeModulesDir = file("frontend")
+}
+dependencies {
+  compileOnly project(":api/proto")
+}
+npm_install.dependsOn(npm_cache_verify)
+copyFiles.dependsOn(npm_install)
+npm_build.dependsOn(copyFiles)
+jar.dependsOn(npm_build)

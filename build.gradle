@@ -1,6 +1,3 @@
-group 'fr.aquabian'
-version '1.0-SNAPSHOT'
-
 buildscript {
     ext {
         springBootVersion = '2.0.1.RELEASE'
@@ -13,36 +10,49 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('org.junit.platform:junit-platform-gradle-plugin:1.1.0')
+        classpath ("com.moowork.gradle:gradle-node-plugin:1.2.0")
+        classpath ("com.google.protobuf:protobuf-gradle-plugin:0.8.5")
     }
-
-
-
 }
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'org.springframework.boot'
+
 ext {
-    springBootVersion = '2.0.1.RELEASE'
-}
-
-sourceCompatibility = 1.8
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.12'
-    compile("org.springframework.boot:spring-boot-starter-web")
+    rxJavaVersion = '2.1.10'
+    lombokVersion = '1.16.20'
+    axonVersion = '3.2'
 
 }
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+allprojects {
+    group = "fr.aquabian"
+    version "1.1-SNAPSHOT"
+    repositories {
+        mavenCentral()
+		jcenter()
+        maven { url ("https://repo.spring.io/snapshot") }
+        maven { url ("https://repo.spring.io/milestone") }
+		maven { url "https://plugins.gradle.org/m2/" }
     }
 
 }
-springBoot {
-    mainClassName = 'fr.aquabian.Main'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    sourceCompatibility = 8
+    targetCompatibility = 8
+
+    apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        }
+        dependencies{
+            dependency "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+            dependency "org.projectlombok:lombok:${lombokVersion}"
+            dependency "org.axonframework:axon-core:${axonVersion}"
+            dependency ("org.axonframework:axon-spring-boot-starter:${axonVersion}")
+        }
+    }
 }

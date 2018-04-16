@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package domain.event;
+
+option java_package = "com.aquabian.api.domain.event";
+import "google/protobuf/timestamp.proto";
+
+message RegisteringRequest {
+    string name = 2;
+    repeated string sensors = 3;
+}
+
+message RegisteringResponse{
+    string id = 1;
+}
+

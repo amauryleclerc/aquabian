@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package domain.event;
+
+option java_package = "com.aquabian.api.domain.event";
+import "google/protobuf/timestamp.proto";
+
+//Device event
+message DeviceCreatedEvent {
+    string id = 1;
+    string name = 2;
+    repeated string sensors = 3;
+}
+
+message SensorAddedToDeviceEvent  {
+    string id = 1;
+    string idSensor = 2;
+}
+
+//Sensor command
+message SensorCreatedEvent  {
+    string id = 1;
+    string name = 2;
+    string device = 3;
+}
+
+message MeasureAddedEvent  {
+    string id = 1;
+    double value = 2;
+    google.protobuf.Timestamp date = 3;
+}

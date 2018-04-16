@@ -1,0 +1,30 @@
+
+apply plugin: 'com.google.protobuf'
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.5.1'
+    compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.5.1'
+
+}
+
+protobuf {
+    // Configure the protoc executable
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:3.5.1-1'
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                js {
+                    // These options are copied as an example from the previously linked doc, which says
+                    // "protoc --proto_path=src --js_out=import_style=commonjs,binary:build/gen src/foo.proto src/bar/baz.proto"
+                    // They are interpreted by protoc. I don't know what they mean. You will need to figure out
+                    // what options you need.
+                    option "import_style=commonjs"
+                    option "binary"
+                }
+            }
+        }
+    }
+}
