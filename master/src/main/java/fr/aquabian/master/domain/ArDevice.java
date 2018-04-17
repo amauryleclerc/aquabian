@@ -1,7 +1,7 @@
 package fr.aquabian.master.domain;
 
-import com.aquabian.api.domain.command.AquabianCommands;
-import com.aquabian.api.domain.event.AquabianEvents;
+import fr.aquabian.api.domain.command.AquabianCommands;
+import fr.aquabian.api.domain.event.AquabianEvents;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;

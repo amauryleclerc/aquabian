@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.event;
 
-option java_package = "com.aquabian.api.domain.event";
+option java_package = "fr.aquabian.api.domain.event";
 import "google/protobuf/timestamp.proto";
 
 //Device event

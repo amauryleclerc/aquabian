@@ -22,6 +22,7 @@ public class CommandTargetResolver implements org.axonframework.commandhandling.
             Object id = method.invoke(command.getPayload());
             return new VersionedAggregateIdentifier(id.toString(), null);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
     }

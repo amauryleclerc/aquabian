@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package domain.command;
+
+option java_package = "fr.aquabian.api.projection.command";
+import "google/protobuf/timestamp.proto";
+
+message SensorProjectionEvent {
+    oneof event {
+        CurrentStateEvent currentStateEvent =1;
+        AddSensorEvent addSensorEvent =2;
+        AddMeasureEvent addMeasureEvent =3;
+    }
+}
+
+message CurrentStateEvent {
+   repeated Sensor sensors = 1;
+}
+
+message AddSensorEvent {
+    Sensor sensors = 1;
+}
+message AddMeasureEvent {
+    string id =1;
+    Measure measures =2;
+}
+
+message Sensor {
+    string id =1;
+    string name = 2;
+    string deviceId = 3;
+    string deviceName = 4;
+    repeated Measure measures =5;
+}
+
+message Measure{
+    double value = 1;
+    google.protobuf.Timestamp date = 2;
+}

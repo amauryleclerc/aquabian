@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.command;
 
-option java_package = "com.aquabian.api.domain.command";
+option java_package = "fr.aquabian.api.domain.command";
 import "google/protobuf/timestamp.proto";
 
 message AquabianCommand {

@@ -1,6 +1,7 @@
 package fr.aquabian.master.controller;
 
-import com.aquabian.api.domain.command.AquabianCommands;
+import fr.aquabian.api.domain.command.AquabianCommands;
+import fr.aquabian.master.utils.AxonUtils;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -30,7 +31,7 @@ public class CommandController {
     public Completable command(@RequestBody byte[] bytes) {
         return Single.fromCallable(() -> AquabianCommands.AquabianCommand.parseFrom(bytes))//
                 .flatMapObservable(c -> Observable.fromIterable(c.getAllFields().values()))//
-                .flatMapCompletable(c -> Completable.fromAction(() -> commandBus.dispatch(asCommandMessage(c), LoggingCallback.INSTANCE)));
+                .flatMapCompletable(c -> AxonUtils.dispatch(commandBus,c).toCompletable());
     }
 
 }

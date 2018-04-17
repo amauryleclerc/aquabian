@@ -6,6 +6,10 @@ task copyFiles(type: Copy) {
   into 'frontend/src/assets/js'
 }
 
+task deleteFiles(type: Delete) {
+  delete 'frontend/src/assets/js'
+}
+
 node{
   version = '8.10.0'
   npmVersion = '5.8.0'
@@ -15,7 +19,7 @@ node{
 dependencies {
   compileOnly project(":api/proto")
 }
-npm_install.dependsOn(npm_cache_verify)
+npm_install.dependsOn(deleteFiles)
 copyFiles.dependsOn(npm_install)
 npm_build.dependsOn(copyFiles)
-jar.dependsOn(npm_build)
+build.dependsOn(npm_build)

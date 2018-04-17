@@ -1,7 +1,7 @@
 package fr.aquabian.slave.service;
 
-import com.aquabian.api.domain.command.AquabianCommands;
-import com.aquabian.api.domain.event.RegisteringService;
+import fr.aquabian.api.domain.command.AquabianCommands;
+import fr.aquabian.api.domain.event.RegisteringService;
 import com.google.protobuf.util.Timestamps;
 import fr.aquabian.api.AquabianConstants;
 import io.reactivex.Observable;
@@ -51,7 +51,6 @@ public class MeasurePusher {
 
     @PostConstruct
     private void init() {
-
         Observable.fromCallable(() -> {
             RegisteringService.RegisteringRequest registeringRequest = RegisteringService.RegisteringRequest.newBuilder()
                     .setName(hostname)//
@@ -83,6 +82,12 @@ public class MeasurePusher {
                                             return restTemp.exchange(masterCommandUri, HttpMethod.POST, entity, byte[].class);
                                         }
                                 ))
+                .flatMap(r -> {
+                    if(r.getStatusCode().isError()){
+                        return Observable.error(new RuntimeException(r.getStatusCode().getReasonPhrase()));
+                    }
+                    return Observable.just(r);
+                })
                 .doOnError(t -> LOGGER.error("Error :", t))//
                 .retryWhen(obs -> obs.delay(3000, TimeUnit.MILLISECONDS))//
                 .subscribe(m -> {

@@ -1,7 +1,7 @@
 package fr.aquabian.master.saga;
 
-import com.aquabian.api.domain.command.AquabianCommands;
-import com.aquabian.api.domain.event.AquabianEvents;
+import fr.aquabian.api.domain.command.AquabianCommands;
+import fr.aquabian.api.domain.event.AquabianEvents;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.callbacks.LoggingCallback;
 import org.axonframework.eventhandling.saga.SagaEventHandler;

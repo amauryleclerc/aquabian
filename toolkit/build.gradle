@@ -1,5 +1,6 @@
 
 
 dependencies {
-
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile "io.reactivex.rxjava2:rxjava"
 }

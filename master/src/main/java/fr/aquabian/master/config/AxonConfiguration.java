@@ -2,10 +2,11 @@ package fr.aquabian.master.config;
 
 import fr.aquabian.master.domain.ArDevice;
 import fr.aquabian.master.domain.ArSensor;
-import fr.aquabian.master.repo.TokenEntryRepo;
 import org.axonframework.config.AggregateConfigurer;
 import org.axonframework.config.Configurer;
 import org.axonframework.config.EventHandlingConfiguration;
+import org.axonframework.eventhandling.tokenstore.TokenStore;
+import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class AxonConfiguration {
 
     @Autowired
-    public void configure(EventHandlingConfiguration configuration, TokenEntryRepo tokenStoreRepo, Configurer configurer) {
-        tokenStoreRepo.deleteAll();
+    public void configure(EventHandlingConfiguration configuration, Configurer configurer) {
         configuration.registerTrackingProcessor("Projection");
 
         configurer.configureAggregate(
@@ -23,6 +23,7 @@ public class AxonConfiguration {
         configurer.configureAggregate(
                 AggregateConfigurer.defaultConfiguration(ArSensor.class)
                         .configureCommandTargetResolver(c -> new CommandTargetResolver()));
+        configurer.registerComponent(TokenStore.class, conf -> new InMemoryTokenStore());
     }
 
 
