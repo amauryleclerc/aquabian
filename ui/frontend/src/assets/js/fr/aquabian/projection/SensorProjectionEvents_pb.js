@@ -507,7 +507,7 @@ proto.domain.command.AddSensorEvent.prototype.toObject = function(opt_includeIns
  */
 proto.domain.command.AddSensorEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sensors: (f = msg.getSensors()) && proto.domain.command.Sensor.toObject(includeInstance, f)
+    sensor: (f = msg.getSensor()) && proto.domain.command.Sensor.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -547,7 +547,7 @@ proto.domain.command.AddSensorEvent.deserializeBinaryFromReader = function(msg, 
     case 1:
       var value = new proto.domain.command.Sensor;
       reader.readMessage(value,proto.domain.command.Sensor.deserializeBinaryFromReader);
-      msg.setSensors(value);
+      msg.setSensor(value);
       break;
     default:
       reader.skipField();
@@ -578,7 +578,7 @@ proto.domain.command.AddSensorEvent.prototype.serializeBinary = function() {
  */
 proto.domain.command.AddSensorEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getSensors();
+  f = message.getSensor();
   if (f != null) {
     writer.writeMessage(
       1,
@@ -590,23 +590,23 @@ proto.domain.command.AddSensorEvent.serializeBinaryToWriter = function(message, 
 
 
 /**
- * optional Sensor sensors = 1;
+ * optional Sensor sensor = 1;
  * @return {?proto.domain.command.Sensor}
  */
-proto.domain.command.AddSensorEvent.prototype.getSensors = function() {
+proto.domain.command.AddSensorEvent.prototype.getSensor = function() {
   return /** @type{?proto.domain.command.Sensor} */ (
     jspb.Message.getWrapperField(this, proto.domain.command.Sensor, 1));
 };
 
 
 /** @param {?proto.domain.command.Sensor|undefined} value */
-proto.domain.command.AddSensorEvent.prototype.setSensors = function(value) {
+proto.domain.command.AddSensorEvent.prototype.setSensor = function(value) {
   jspb.Message.setWrapperField(this, 1, value);
 };
 
 
-proto.domain.command.AddSensorEvent.prototype.clearSensors = function() {
-  this.setSensors(undefined);
+proto.domain.command.AddSensorEvent.prototype.clearSensor = function() {
+  this.setSensor(undefined);
 };
 
 
@@ -614,7 +614,7 @@ proto.domain.command.AddSensorEvent.prototype.clearSensors = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.domain.command.AddSensorEvent.prototype.hasSensors = function() {
+proto.domain.command.AddSensorEvent.prototype.hasSensor = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -667,7 +667,7 @@ proto.domain.command.AddMeasureEvent.prototype.toObject = function(opt_includeIn
 proto.domain.command.AddMeasureEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    measures: (f = msg.getMeasures()) && proto.domain.command.Measure.toObject(includeInstance, f)
+    measure: (f = msg.getMeasure()) && proto.domain.command.Measure.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -711,7 +711,7 @@ proto.domain.command.AddMeasureEvent.deserializeBinaryFromReader = function(msg,
     case 2:
       var value = new proto.domain.command.Measure;
       reader.readMessage(value,proto.domain.command.Measure.deserializeBinaryFromReader);
-      msg.setMeasures(value);
+      msg.setMeasure(value);
       break;
     default:
       reader.skipField();
@@ -749,7 +749,7 @@ proto.domain.command.AddMeasureEvent.serializeBinaryToWriter = function(message,
       f
     );
   }
-  f = message.getMeasures();
+  f = message.getMeasure();
   if (f != null) {
     writer.writeMessage(
       2,
@@ -776,23 +776,23 @@ proto.domain.command.AddMeasureEvent.prototype.setId = function(value) {
 
 
 /**
- * optional Measure measures = 2;
+ * optional Measure measure = 2;
  * @return {?proto.domain.command.Measure}
  */
-proto.domain.command.AddMeasureEvent.prototype.getMeasures = function() {
+proto.domain.command.AddMeasureEvent.prototype.getMeasure = function() {
   return /** @type{?proto.domain.command.Measure} */ (
     jspb.Message.getWrapperField(this, proto.domain.command.Measure, 2));
 };
 
 
 /** @param {?proto.domain.command.Measure|undefined} value */
-proto.domain.command.AddMeasureEvent.prototype.setMeasures = function(value) {
+proto.domain.command.AddMeasureEvent.prototype.setMeasure = function(value) {
   jspb.Message.setWrapperField(this, 2, value);
 };
 
 
-proto.domain.command.AddMeasureEvent.prototype.clearMeasures = function() {
-  this.setMeasures(undefined);
+proto.domain.command.AddMeasureEvent.prototype.clearMeasure = function() {
+  this.setMeasure(undefined);
 };
 
 
@@ -800,7 +800,7 @@ proto.domain.command.AddMeasureEvent.prototype.clearMeasures = function() {
  * Returns whether this field is set.
  * @return {!boolean}
  */
-proto.domain.command.AddMeasureEvent.prototype.hasMeasures = function() {
+proto.domain.command.AddMeasureEvent.prototype.hasMeasure = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 

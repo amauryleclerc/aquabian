@@ -18,11 +18,11 @@ message CurrentStateEvent {
 }
 
 message AddSensorEvent {
-    Sensor sensors = 1;
+    Sensor sensor = 1;
 }
 message AddMeasureEvent {
     string id =1;
-    Measure measures =2;
+    Measure measure =2;
 }
 
 message Sensor {

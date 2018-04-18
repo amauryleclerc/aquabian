@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -36,18 +37,19 @@ public class SensorProjection implements ISensorProjectionEventStream {
         sensorMap.put(event.getId(), sensor);
         sensorProjectionEventSubject.onNext(SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
                 .setAddSensorEvent(SensorProjectionEvents.AddSensorEvent.newBuilder()//
-                        .setSensors(sensor)//
+                        .setSensor(sensor)//
                 ).build());
 
     }
 
     @EventSourcingHandler
     public void handle(AquabianEvents.MeasureAddedEvent event) {
-        measureMap.put(event.getId(),event.getDate(), event.getValue());
+        System.err.println(event);
+        measureMap.put(event.getId(), event.getDate(), event.getValue());
         sensorProjectionEventSubject.onNext(SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
                 .setAddMeasureEvent(SensorProjectionEvents.AddMeasureEvent.newBuilder()//
                         .setId(event.getId())//
-                        .setMeasures(SensorProjectionEvents.Measure.newBuilder()//
+                        .setMeasure(SensorProjectionEvents.Measure.newBuilder()//
                                 .setValue(event.getValue())//
                                 .setDate(event.getDate())//
                         )
@@ -57,11 +59,23 @@ public class SensorProjection implements ISensorProjectionEventStream {
 
     @Override
     public Observable<SensorProjectionEvents.SensorProjectionEvent> getStream() {
-        return Observable.fromCallable(() ->
-                SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
+        return Observable.fromIterable(sensorMap.entrySet())//
+                .map(e -> e.getValue().toBuilder()//
+                        .addAllMeasures(measureMap.row(e.getKey())//
+                                .entrySet()//
+                                .stream()//
+                                .map(measureEntry -> SensorProjectionEvents.Measure.newBuilder()//
+                                        .setDate(measureEntry.getKey())//
+                                        .setValue(measureEntry.getValue())//
+                                        .build()//
+                                ).collect(Collectors.toSet()))//
+                        .build()//
+                ).toList()//
+                .map(sensors -> SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
                         .setCurrentStateEvent(SensorProjectionEvents.CurrentStateEvent.newBuilder()
-                                .addAllSensors(sensorMap.values())//
+                                .addAllSensors(sensors)//
                         ).build())//
+                .toObservable()//
                 .concatWith(sensorProjectionEventSubject);
     }
 }

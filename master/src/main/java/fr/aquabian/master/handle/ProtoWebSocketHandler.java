@@ -5,6 +5,7 @@ import com.google.protobuf.MessageLite;
 import fr.aquabian.toolkit.RxUtils;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.*;
@@ -34,6 +35,7 @@ public class ProtoWebSocketHandler implements WebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         LOGGER.info("New webwork session {} - {}", webSocketSession.getId(), webSocketSession.getPrincipal());
         Disposable sub = streamSupplier.get()
+                .observeOn(Schedulers.io())//
                 .map(MessageLite::toByteArray)//
                 .map(BinaryMessage::new)//
                 .doOnTerminate(webSocketSession::close)

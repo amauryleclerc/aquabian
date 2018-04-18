@@ -4,29 +4,21 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { ChartModule } from 'angular-highcharts';
 import {RxWebsocketClient} from './service/rx-websocket-client';
 import {SensorService} from './sensor/service/sensor.service';
+import { SensorsComponent } from './sensor/component/sensors.component';
 
 const appRoutes: Routes = [
-  // { path: 'stories', component: StoriesComponent },
-  // { path: 'story/:id', component: StoryComponent },
-  // { path: 'releases', component: ReleasesComponent },
-  // { path: 'sprints', component: SprintsComponent },
-  // // { path: 'sprint/:id', component: SprintComponent },
-  // // { path: 'graph', component: GraphComponent },
-  // // { path: 'plush', component: PlushComponent },
-  // // { path: 'settings', component: SettingsComponent },
-  // // { path: 'jira/project', component: JiraProjectComponent },
-  // // { path: 'jira/sprint/:id', component: JiraSprintComponent },
-  // // { path: 'jira/story/:id', component: JiraStoryComponent },
-  // { path: '', redirectTo: '/sprints', pathMatch: 'full' },
-  // { path: '*', redirectTo: '/sprints', pathMatch: 'full' },
+   { path: 'sensors', component: SensorsComponent },
+   { path: '', redirectTo: '/sensors', pathMatch: 'full' },
+   { path: '*', redirectTo: '/sensors', pathMatch: 'full' }
 ];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SensorsComponent
   ],
   imports: [
     BrowserModule,
@@ -34,8 +26,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes, { useHash: true }),
+    ChartModule
   ],
-  providers: [RxWebsocketClient],
+  providers: [RxWebsocketClient, SensorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
