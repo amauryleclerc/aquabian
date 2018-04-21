@@ -1,9 +1,6 @@
 
-plugins {
-    id "java"
-}
-repositories {
-    mavenCentral()
+jar {
+    baseName "aquabian-api-java"
 }
 
 dependencies {

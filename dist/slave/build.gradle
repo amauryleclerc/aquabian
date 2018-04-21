@@ -1,0 +1,22 @@
+apply plugin: 'application'
+
+dependencies {
+    runtime project(':slave')
+
+}
+mainClassName = 'fr.aquabian.slave.AquabianSlaveApp'
+
+applicationName = 'aquabian-dist-slave'
+
+applicationDefaultJvmArgs = ["-Xms512m", "-Xmx1024m"]
+
+startScripts {
+    classpath = files('src/dist/etc')
+    classpath += files('$APP_HOME/lib/*')
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile    = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\etc', '%APP_HOME%\\etc')
+        unixScriptFile.text  = unixScriptFile.text.replace('$APP_HOME/lib/etc', '$APP_HOME/etc')
+    }
+}

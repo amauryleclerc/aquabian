@@ -1,0 +1,24 @@
+apply plugin: 'application'
+
+dependencies {
+    runtime project(':master')
+    runtime project(':ui')
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+}
+mainClassName = 'fr.aquabian.master.AquabianMasterApp'
+
+applicationName = 'aquabian-dist-master'
+
+applicationDefaultJvmArgs = ["-Xms512m", "-Xmx2048m"]
+
+startScripts {
+    classpath = files('src/dist/etc')
+    classpath += files('$APP_HOME/lib/*')
+    doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile    = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replace('%APP_HOME%\\lib\\etc', '%APP_HOME%\\etc')
+        unixScriptFile.text  = unixScriptFile.text.replace('$APP_HOME/lib/etc', '$APP_HOME/etc')
+    }
+}

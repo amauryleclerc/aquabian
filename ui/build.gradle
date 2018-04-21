@@ -1,6 +1,10 @@
 
 apply plugin:"com.moowork.node"
 
+jar {
+  baseName "aquabian-ui"
+}
+
 task copyFiles(type: Copy) {
   from '../api/proto/build/generated/source/proto/main/js'
   into 'frontend/src/assets/js'
@@ -16,8 +20,10 @@ node{
   download = true
   nodeModulesDir = file("frontend")
 }
+
 dependencies {
   compileOnly project(":api/proto")
+
 }
 npm_install.dependsOn(deleteFiles)
 copyFiles.dependsOn(npm_install)

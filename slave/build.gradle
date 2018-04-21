@@ -1,4 +1,7 @@
-apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName "aquabian-slave"
+}
 
 dependencies {
     compile project(':api/java')
@@ -7,7 +10,4 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-web'
 
 
-}
-springBoot {
-    mainClassName = 'fr.aquabian.slave.AquabianSlaveApp'
 }

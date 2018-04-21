@@ -1,4 +1,6 @@
-apply plugin: 'org.springframework.boot'
+jar {
+    baseName "aquabian-master"
+}
 
 dependencies {
     compile project(':api/java')
@@ -12,7 +14,4 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 
-}
-springBoot {
-    mainClassName = 'fr.aquabian.master.AquabianMasterApp'
 }
