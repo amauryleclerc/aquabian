@@ -20,14 +20,14 @@ export class SensorsComponent {
       enabled: false
     },
     xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: { // don't display the dummy year
-            month: '%e. %b',
-            year: '%b'
-        },
-        title: {
-            text: 'Date'
-        }
+      type: 'datetime',
+      dateTimeLabelFormats: { // don't display the dummy year
+        month: '%e. %b',
+        year: '%b'
+      },
+      title: {
+        text: 'Date'
+      }
     },
     series: [{
       name: 'Line 1',
@@ -37,17 +37,17 @@ export class SensorsComponent {
 
   constructor(private sensorService: SensorService) {
     sensorService.getSensorsStream().subscribe(m => {
-setTimeout(() => {
+      setTimeout(() => {
         this.sensors = Array.from(m.values());
         console.log(this.sensors);
-});
+      });
 
-    } , e => console.error(e));
+    }, e => console.error(e));
 
     sensorService.getMeasureStream().subscribe(measures => {
-        setTimeout(() => {
-          measures.forEach(m =>this.chart.addPoint([m.date.getTime(), m.value]));
-        });
+      setTimeout(() => {
+        measures.forEach(m => this.chart.addPoint([m.date.getTime(), m.value]));
+      });
     });
   }
 

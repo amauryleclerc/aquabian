@@ -1,8 +1,9 @@
 <div [chart]="chart"></div>
-<ul  *ngFor="let sensor of sensors" >
-        {{sensor.name}} 
-    <li *ngFor="let measure of sensor.measures" >
-            {{measure.date}} - {{measure.value}}
-    </li>
+<ul *ngFor="let sensor of sensors">
+        <h2> {{sensor.name}}
+                <span *ngIf="sensor.currentMeasure"> - {{sensor.currentMeasure.value}}</span>
+        </h2>
+        <li *ngFor="let measure of sensor.measures"> 
+                {{measure.date}} - {{measure.value}}
+        </li>
 </ul>
-

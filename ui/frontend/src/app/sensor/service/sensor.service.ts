@@ -78,7 +78,7 @@ export class SensorService {
     private handleAddmeasureevent(event: any): void {
         console.log('handleAddmeasureevent');
         const measure: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());
-        this.sensors.get(event.getId()).measures.push(measure);
+        this.sensors.get(event.getId()).addMeasure(measure);
         //   this.sensorsSubject.next(this.sensors);
         this.measureSubject.next(Array.of(measure));
     }
