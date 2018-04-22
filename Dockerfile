@@ -1,5 +1,5 @@
 # BUILD
-FROM FROM openjdk:8-jdk as builder
+FROM openjdk:8-jdk as builder
 WORKDIR /build
 ADD . /build
 RUN ./gradlew clean build
