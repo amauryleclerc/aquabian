@@ -44,10 +44,10 @@ setTimeout(() => {
 
     } , e => console.error(e));
 
-    sensorService.getMeasureStream().subscribe(m => {
+    sensorService.getMeasureStream().subscribe(measures => {
         setTimeout(() => {
-        this.chart.addPoint([m.date.getTime(), m.value]);
-    });
+          measures.forEach(m =>this.chart.addPoint([m.date.getTime(), m.value]));
+        });
     });
   }
 

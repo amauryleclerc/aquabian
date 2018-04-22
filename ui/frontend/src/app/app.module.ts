@@ -8,6 +8,7 @@ import { ChartModule } from 'angular-highcharts';
 import {RxWebsocketClient} from './service/rx-websocket-client';
 import {SensorService} from './sensor/service/sensor.service';
 import { SensorsComponent } from './sensor/component/sensors.component';
+import { ConfigService } from './service/config.service';
 
 const appRoutes: Routes = [
    { path: 'sensors', component: SensorsComponent },
@@ -28,7 +29,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { useHash: true }),
     ChartModule
   ],
-  providers: [RxWebsocketClient, SensorService],
+  providers: [RxWebsocketClient, SensorService, ConfigService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
