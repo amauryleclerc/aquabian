@@ -5,15 +5,6 @@ jar {
   baseName "aquabian-ui"
 }
 
-task copyFiles(type: Copy) {
-  from '../api/proto/build/generated/source/proto/main/js'
-  into 'frontend/src/assets/js'
-}
-
-task deleteFiles(type: Delete) {
-  delete 'frontend/src/assets/js'
-}
-
 node{
   version = '8.10.0'
   npmVersion = '5.8.0'
@@ -25,7 +16,21 @@ dependencies {
   compileOnly project(":api/proto")
 
 }
+
+task copyFiles(type: Copy) {
+  from '../api/proto/build/generated/source/proto/main/js'
+  into 'frontend/src/assets/js'
+}
+
+task deleteFiles(type: Delete) {
+  delete 'frontend/src/assets/js'
+}
+
+task buildFrontend(type: NpmTask) {
+  args = ['run-script', 'build']
+}
+
 npm_install.dependsOn(deleteFiles)
 copyFiles.dependsOn(npm_install)
-npm_build.dependsOn(copyFiles)
-build.dependsOn(npm_build)
+buildFrontend.dependsOn(copyFiles)
+build.dependsOn(buildFrontend)

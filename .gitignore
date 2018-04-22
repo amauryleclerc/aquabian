@@ -2,3 +2,5 @@ build/
 .gradle/
 .idea/
 out/
+ui/frontend/node_modules/
+ui/src/main/resources/static/

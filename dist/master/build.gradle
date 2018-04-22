@@ -1,8 +1,8 @@
 apply plugin: 'application'
 
 dependencies {
-    runtime project(':master')
-    runtime project(':ui')
+    compile project(':master')
+    compile project(':ui')
     compile("org.springframework.boot:spring-boot-starter-web")
 
 }
