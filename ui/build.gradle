@@ -33,4 +33,4 @@ task buildFrontend(type: NpmTask) {
 npm_install.dependsOn(deleteFiles)
 copyFiles.dependsOn(npm_install)
 buildFrontend.dependsOn(copyFiles)
-build.dependsOn(buildFrontend)
+jar.dependsOn(buildFrontend)
