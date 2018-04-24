@@ -16,7 +16,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Aggregate
-@NoArgsConstructor
 @Entity
 public class ArSensor {
     private final static Logger LOGGER = LoggerFactory.getLogger(ArDevice.class);
@@ -33,6 +32,10 @@ public class ArSensor {
 
     @Basic
     private Double lastValue;
+
+    public ArSensor(){
+
+    }
 
 
     @CommandHandler

@@ -20,7 +20,6 @@ import java.util.Collection;
 
 
 @Aggregate
-@NoArgsConstructor
 @Entity
 public class ArDevice {
     private final static Logger LOGGER = LoggerFactory.getLogger(ArDevice.class);
@@ -36,6 +35,8 @@ public class ArDevice {
     @ElementCollection
     public Collection<String> sensors;
 
+    public ArDevice() {
+    }
 
     @CommandHandler
     public ArDevice(AquabianCommands.CreateDeviceCommand command) {

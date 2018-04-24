@@ -10,6 +10,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import org.axonframework.config.ProcessingGroup;
+import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class SensorProjection implements ISensorProjectionEventStream {
     private Subject<SensorProjectionEvents.SensorProjectionEvent> sensorProjectionEventSubject = PublishSubject.<SensorProjectionEvents.SensorProjectionEvent>create().toSerialized();
 
 
-    @EventSourcingHandler
+    @EventHandler
     public void handle(AquabianEvents.SensorCreatedEvent event) {
         final SensorProjectionEvents.Sensor sensor = SensorProjectionEvents.Sensor.newBuilder()//
                 .setId(event.getId())//
@@ -42,7 +43,7 @@ public class SensorProjection implements ISensorProjectionEventStream {
 
     }
 
-    @EventSourcingHandler
+    @EventHandler
     public void handle(AquabianEvents.MeasureAddedEvent event) {
         System.err.println(event);
         measureMap.put(event.getId(), event.getDate(), event.getValue());
