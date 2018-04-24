@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @ProcessingGroup("Projection")
 public class MeasureProjection {
@@ -28,15 +26,19 @@ public class MeasureProjection {
     }
 
     @GetMapping("/aquabian/measure")
-    public Response getLastMeasure(){
-        return new Response("Il fait "+value+" Degrées");
+    public Response getLastMeasure() {
+        return getResponse();
     }
 
-
-
     @PostMapping("/aquabian/measure")
-    public Response getLastMeasurePost(){
-        return new Response("Il fait "+value+" Degrées");
+    public Response getLastMeasurePost() {
+        return getResponse();
+    }
+
+    private Response getResponse() {
+        String text = "Il fait " + value + " Degrées";
+        text = text.replace(".", ",");
+        return new Response(text);
     }
 
     public class Response {
