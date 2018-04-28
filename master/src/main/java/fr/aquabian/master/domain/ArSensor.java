@@ -1,5 +1,7 @@
 package fr.aquabian.master.domain;
 
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.Timestamps;
 import fr.aquabian.api.domain.command.AquabianCommands;
 import fr.aquabian.api.domain.event.AquabianEvents;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.Instant;
 
 @Aggregate
 @Entity
@@ -50,16 +53,17 @@ public class ArSensor {
 
     @CommandHandler
     public void addSensor(AquabianCommands.AddMeasureCommand command) {
+        Timestamp timestamp = Timestamps.fromMillis(Instant.now().toEpochMilli());
         AggregateLifecycle.apply(AquabianEvents.MeasureAddedEvent.newBuilder()//
                 .setId(command.getId())//
-                .setDate(command.getDate())//
+                .setDate(timestamp)//
                 .setValue(command.getValue())//
                 .build());
     }
 
     @EventSourcingHandler
     public void on(AquabianEvents.SensorCreatedEvent event) {
-        LOGGER.info("Create sensor {} with name {}", event.getId(), event.getName());
+        LOGGER.debug("Create sensor {} with name {}", event.getId(), event.getName());
         this.id = event.getId();
         this.name = event.getName();
         this.deviceId = event.getDevice();
@@ -67,7 +71,7 @@ public class ArSensor {
 
     @EventSourcingHandler
     public void on(AquabianEvents.MeasureAddedEvent event) {
-        LOGGER.info("Add mesure {} from sensor {} - {}", event.getValue(), this.id, this.name);
+        LOGGER.debug("Add mesure {} from sensor {} - {}", event.getValue(), this.id, this.name);
         this.lastValue = event.getValue();
     }
 }

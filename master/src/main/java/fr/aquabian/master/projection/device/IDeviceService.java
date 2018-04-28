@@ -1,4 +1,4 @@
-package fr.aquabian.master.projection;
+package fr.aquabian.master.projection.device;
 
 import java.util.Collection;
 

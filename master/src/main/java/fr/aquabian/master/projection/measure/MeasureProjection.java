@@ -1,4 +1,4 @@
-package fr.aquabian.master.projection;
+package fr.aquabian.master.projection.measure;
 
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;

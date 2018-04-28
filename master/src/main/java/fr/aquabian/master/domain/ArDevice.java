@@ -58,7 +58,7 @@ public class ArDevice {
 
     @EventSourcingHandler
     public void on(AquabianEvents.DeviceCreatedEvent event) {
-        LOGGER.info("Create device {} with name {}", event.getId(), event.getName());
+        LOGGER.debug("Create device {} with name {}", event.getId(), event.getName());
         this.id = event.getId();
         this.name = event.getName();
         this.sensors = new ArrayList<>(event.getSensorsList());
@@ -66,7 +66,7 @@ public class ArDevice {
 
     @EventSourcingHandler
     public void on(AquabianEvents.SensorAddedToDeviceEvent event) {
-        LOGGER.info("Add sensor to device {} - {}", this.id, this.name);
+        LOGGER.debug("Add sensor to device {} - {}", this.id, this.name);
         this.sensors.add(event.getIdSensor());
     }
 }

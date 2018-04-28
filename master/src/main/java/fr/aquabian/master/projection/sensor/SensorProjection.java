@@ -1,4 +1,4 @@
-package fr.aquabian.master.projection;
+package fr.aquabian.master.projection.sensor;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -45,7 +45,6 @@ public class SensorProjection implements ISensorProjectionEventStream {
 
     @EventHandler
     public void handle(AquabianEvents.MeasureAddedEvent event) {
-        System.err.println(event);
         measureMap.put(event.getId(), event.getDate(), event.getValue());
         sensorProjectionEventSubject.onNext(SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
                 .setAddMeasureEvent(SensorProjectionEvents.AddMeasureEvent.newBuilder()//

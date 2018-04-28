@@ -2,7 +2,7 @@ package fr.aquabian.master.controller;
 
 import fr.aquabian.api.domain.command.AquabianCommands;
 import fr.aquabian.api.domain.event.RegisteringService;
-import fr.aquabian.master.projection.IDeviceService;
+import fr.aquabian.master.projection.device.IDeviceService;
 import io.reactivex.Completable;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.callbacks.LoggingCallback;

@@ -23,7 +23,7 @@ public class AxonConfiguration {
         configurer.configureAggregate(
                 AggregateConfigurer.defaultConfiguration(ArSensor.class)
                         .configureCommandTargetResolver(c -> new CommandTargetResolver()));
-        configurer.registerComponent(TokenStore.class, conf -> new InMemoryTokenStore());
+     //   configurer.registerComponent(TokenStore.class, conf -> new InMemoryTokenStore());
     }
 
 
