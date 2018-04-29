@@ -57,7 +57,6 @@ public class GraphProjection implements IGraphProjection {
 
     @Override
     public Observable<SensorProjectionEvents.SensorProjectionEvent> getStream(long seconds) {
-        System.err.println("GraphProjection "+contexts.size());
         GraphContext context = new GraphContext(seconds, measureRepository);
         return context.getStream()//
                 .doOnSubscribe(s -> this.contexts.add(context))//
@@ -114,7 +113,6 @@ public class GraphProjection implements IGraphProjection {
         private Single<SensorProjectionEvents.SensorProjectionEvent> getCurrentState() {
             return Observable.fromCallable(() -> measureRepository.findByDateAfter(Instant.now().minusSeconds(second)))//
                     .subscribeOn(Schedulers.io())//
-                    .doOnNext(v -> System.err.println(v))//
                     .flatMap(Observable::fromIterable)//
                     .groupBy(MeasureEntity::getSensor)//
                     .flatMapSingle(obs -> obs.map(this::convertMeasure)//

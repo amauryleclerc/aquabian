@@ -30,9 +30,15 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(ProtoWebSocketHandler.create(m -> {
                     long second = Optional.ofNullable(m.get("seconds"))//
-                            .filter(l -> l.size()>0)//
+                            .filter(l -> l.size() > 0)//
                             .map(l -> l.get(0))//
-                            .map(Long::valueOf)//
+                            .flatMap(v -> {
+                                try {
+                                    return Optional.of(Long.valueOf(v));
+                                } catch (Exception e) {
+                                    return Optional.empty();
+                                }
+                            })//
                             .orElse(30l);
                     return graphProjection.getStream(second);
                 }),//

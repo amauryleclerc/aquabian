@@ -34,7 +34,7 @@ export class SensorService {
             type: 'line'
         },
         title: {
-            text: 'Linechart'
+            text: 'Temperature'
         },
         credits: {
             enabled: false
@@ -93,7 +93,6 @@ export class SensorService {
         console.log('handleCurrentstateevent');
         this.chart.ref.series.forEach(s =>{
             const serie: any = s;
-            console.log(serie);
             this.chart.removeSerie(serie.index);
         } );
         event.getSensorsList()//
@@ -103,17 +102,19 @@ export class SensorService {
                 this.chart.addSerie({
                     name: sensor.name,
                     id: sensor.id,
-                    data: []
+                    data: sensor.measures.map(m => [m.date.getTime(), m.value])
                 });
-                sensor.measures.forEach(m =>  this.chart.addPoint([m.date.getTime(), m.value]), this.getSeriesIndex(sensor.id));
             });
-        console.log(this.chart.ref.series.length);
-    //    this.sensorsSubject.next(this.sensors);
     }
     private handleAddsensorevent(event: any): void {
         console.log('handleAddsensorevent');
         const sensor: Sensor = this.createSensor(event.getSensor());
         this.sensors.set(sensor.id, sensor);
+        this.chart.addSerie({
+            name: sensor.name,
+            id: sensor.id,
+            data: []
+        });
      //   this.sensorsSubject.next(this.sensors);
 
     }

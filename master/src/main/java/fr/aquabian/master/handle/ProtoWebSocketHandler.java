@@ -43,7 +43,6 @@ public class ProtoWebSocketHandler implements WebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         LOGGER.info("New webwork session {} - {}", webSocketSession.getId(), webSocketSession.getPrincipal());
-        System.err.println("size "+subs.size());
         Disposable sub = streamSupplier.apply(splitQuery(webSocketSession.getUri()))//
                 .observeOn(Schedulers.io())//
                 .map(MessageLite::toByteArray)//
