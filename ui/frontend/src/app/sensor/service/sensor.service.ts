@@ -8,6 +8,7 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/repeatWhen';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/observable/from';
@@ -25,15 +26,23 @@ export class SensorService {
     private sensors: Map<String, Sensor> = new Map<String, Sensor>();
     private sensorsSubject: Subject<Map<String, Sensor>> = new BehaviorSubject<Map<String, Sensor>>(this.sensors);
     private measureSubject: Subject<Array<Measure>> = new Subject<Array<Measure>>();
+    private rangeSubject: Subject<Number> = new BehaviorSubject<Number>(60);
 
     constructor(private websocketClient: RxWebsocketClient, private zone: NgZone, private configService: ConfigService) {
 
-        websocketClient.create(configService.getWsBaseUrl() + AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH)//
+        this.rangeSubject.switchMap(second => websocketClient.create(configService.getWsBaseUrl() + AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH+"?seconds="+second))//
             .repeatWhen(obs => obs.delay(5000).do(v => console.log('repeat')))
             .map(e => sensorProjectionsEvents.SensorProjectionEvent.deserializeBinary(e))//
             .subscribe(e => this.handleSensorProjectionEvent(e)
                 , e => console.error(e));
 
+    }
+
+    public getRangeSeconds(): Observable<Number> {
+        return this.rangeSubject;
+    }
+    public setRangeSeconds(second: Number): void {
+        this.rangeSubject.next(second);
     }
 
     public getSensors(): Map<String, Sensor> {

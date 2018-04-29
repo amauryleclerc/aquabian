@@ -1,5 +1,6 @@
 package fr.aquabian.master.handle;
 
+import com.google.common.base.Strings;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageLite;
 import fr.aquabian.toolkit.RxUtils;
@@ -10,31 +11,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.net.URI;
+import java.net.URL;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class ProtoWebSocketHandler implements WebSocketHandler {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ProtoWebSocketHandler.class);
-    private final Supplier<Observable<? extends Message>> streamSupplier;
+    private final Function<Map<String, List<String>>, Observable<? extends Message>> streamSupplier;
 
     private final Map<String, Disposable> subs = new HashMap<>();
 
-    private ProtoWebSocketHandler(Supplier<Observable<? extends Message>> streamSupplier) {
+    private ProtoWebSocketHandler(Function<Map<String, List<String>>, Observable<? extends Message>> streamSupplier) {
         this.streamSupplier = streamSupplier;
     }
 
-    public static ProtoWebSocketHandler create(Supplier<Observable<? extends Message>> streamSupplier) {
+    public static ProtoWebSocketHandler create(Function<Map<String, List<String>>, Observable<? extends Message>> streamSupplier) {
         return new ProtoWebSocketHandler(streamSupplier);
+    }
+
+    public static ProtoWebSocketHandler create(Supplier<Observable<? extends Message>> streamSupplier) {
+        return new ProtoWebSocketHandler(m -> streamSupplier.get());
     }
 
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         LOGGER.info("New webwork session {} - {}", webSocketSession.getId(), webSocketSession.getPrincipal());
-        Disposable sub = streamSupplier.get()
+        Disposable sub = streamSupplier.apply(splitQuery(webSocketSession.getUri()))//
                 .observeOn(Schedulers.io())//
                 .map(MessageLite::toByteArray)//
                 .map(BinaryMessage::new)//
@@ -69,5 +78,21 @@ public class ProtoWebSocketHandler implements WebSocketHandler {
     @Override
     public boolean supportsPartialMessages() {
         return false;
+    }
+
+    private Map<String, List<String>> splitQuery(URI url) {
+        if (Strings.isNullOrEmpty(url.getQuery())) {
+            return Collections.emptyMap();
+        }
+        return Arrays.stream(url.getQuery().split("&"))
+                .map(this::splitQueryParameter)
+                .collect(Collectors.groupingBy(AbstractMap.SimpleImmutableEntry::getKey, LinkedHashMap::new, Collectors.mapping(Map.Entry::getValue, toList())));
+    }
+
+    private AbstractMap.SimpleImmutableEntry<String, String> splitQueryParameter(String it) {
+        final int idx = it.indexOf("=");
+        final String key = idx > 0 ? it.substring(0, idx) : it;
+        final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : null;
+        return new AbstractMap.SimpleImmutableEntry<>(key, value);
     }
 }

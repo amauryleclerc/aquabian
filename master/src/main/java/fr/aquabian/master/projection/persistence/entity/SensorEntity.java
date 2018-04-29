@@ -2,10 +2,11 @@ package fr.aquabian.master.projection.persistence.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 
 @Entity
 @Data
@@ -19,10 +20,6 @@ public class SensorEntity implements Serializable {
 
     @ManyToOne
     private DeviceEntity device;
-
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "sensor")
-    private Collection<MeasureEntity> measures = Collections.emptySet();
-
 
     @Override
     public String toString() {

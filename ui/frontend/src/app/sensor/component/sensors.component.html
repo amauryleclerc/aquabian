@@ -1,4 +1,5 @@
 <div [chart]="chart"></div>
+<input type="number" [ngModel]="range" (ngModelChange)="rangeChange($event)" />
 <ul *ngFor="let sensor of sensors">
         <h2> {{sensor.name}}
                 <span *ngIf="sensor.currentMeasure"> - {{sensor.currentMeasure.value}}</span>

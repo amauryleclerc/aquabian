@@ -35,6 +35,7 @@ export class SensorsComponent {
     }]
   });
 
+  range: Number = 0;
   constructor(private sensorService: SensorService) {
     sensorService.getSensorsStream().subscribe(m => {
       setTimeout(() => {
