@@ -1,10 +1,9 @@
 <div [chart]="chart"></div>
-<input type="number" [ngModel]="range" (ngModelChange)="rangeChange($event)" />
-<ul *ngFor="let sensor of sensors">
-        <h2> {{sensor.name}}
-                <span *ngIf="sensor.currentMeasure"> - {{sensor.currentMeasure.value}}</span>
-        </h2>
-        <li *ngFor="let measure of sensor.measures"> 
-                {{measure.date}} - {{measure.value}}
-        </li>
-</ul>
+
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">Duration in seconds :</span>
+  </div>
+  <input type="number" class="form-control" [ngModel]="range" (ngModelChange)="rangeChange($event)" aria-describedby="basic-addon1"/>
+</div>

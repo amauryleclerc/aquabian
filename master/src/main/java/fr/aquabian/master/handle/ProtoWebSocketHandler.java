@@ -43,6 +43,7 @@ public class ProtoWebSocketHandler implements WebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
         LOGGER.info("New webwork session {} - {}", webSocketSession.getId(), webSocketSession.getPrincipal());
+        System.err.println("size "+subs.size());
         Disposable sub = streamSupplier.apply(splitQuery(webSocketSession.getUri()))//
                 .observeOn(Schedulers.io())//
                 .map(MessageLite::toByteArray)//
@@ -71,7 +72,7 @@ public class ProtoWebSocketHandler implements WebSocketHandler {
     }
 
     private void dispose(String id) {
-        Optional.ofNullable(subs.get(id)).ifPresent(Disposable::dispose);
+        Optional.ofNullable(subs.remove(id)).ifPresent(Disposable::dispose);
     }
 
 

@@ -29,13 +29,11 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(ProtoWebSocketHandler.create(m -> {
-                    System.out.println("m = " + m);
                     long second = Optional.ofNullable(m.get("seconds"))//
                             .filter(l -> l.size()>0)//
                             .map(l -> l.get(0))//
                             .map(Long::valueOf)//
                             .orElse(30l);
-                    System.out.println("second = " + second);
                     return graphProjection.getStream(second);
                 }),//
                 AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH);

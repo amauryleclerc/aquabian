@@ -9,6 +9,7 @@ import {RxWebsocketClient} from './service/rx-websocket-client';
 import {SensorService} from './sensor/service/sensor.service';
 import { SensorsComponent } from './sensor/component/sensors.component';
 import { ConfigService } from './service/config.service';
+import { FormsModule } from '@angular/forms';
 
 const appRoutes: Routes = [
    { path: 'sensors', component: SensorsComponent },
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
     SensorsComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     BrowserModule,
     HttpClientModule,

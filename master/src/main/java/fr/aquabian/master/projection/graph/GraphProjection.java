@@ -8,6 +8,7 @@ import fr.aquabian.master.projection.persistence.entity.SensorEntity;
 import fr.aquabian.master.projection.persistence.repository.MeasureRepository;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import org.axonframework.config.ProcessingGroup;
@@ -56,10 +57,11 @@ public class GraphProjection implements IGraphProjection {
 
     @Override
     public Observable<SensorProjectionEvents.SensorProjectionEvent> getStream(long seconds) {
+        System.err.println("GraphProjection "+contexts.size());
         GraphContext context = new GraphContext(seconds, measureRepository);
         return context.getStream()//
                 .doOnSubscribe(s -> this.contexts.add(context))//
-                .doOnComplete(() -> this.contexts.remove(context));
+                .doOnDispose(() -> this.contexts.remove(context));
     }
 
     private class GraphContext {
@@ -111,6 +113,8 @@ public class GraphProjection implements IGraphProjection {
 
         private Single<SensorProjectionEvents.SensorProjectionEvent> getCurrentState() {
             return Observable.fromCallable(() -> measureRepository.findByDateAfter(Instant.now().minusSeconds(second)))//
+                    .subscribeOn(Schedulers.io())//
+                    .doOnNext(v -> System.err.println(v))//
                     .flatMap(Observable::fromIterable)//
                     .groupBy(MeasureEntity::getSensor)//
                     .flatMapSingle(obs -> obs.map(this::convertMeasure)//
