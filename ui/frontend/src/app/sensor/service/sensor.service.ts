@@ -21,6 +21,7 @@ import { Measure } from '../model/measure';
 import { ConfigService } from '../../service/config.service';
 import { AquabianConstants } from '../../aquabian.constants';
 import { Chart } from 'angular-highcharts';
+import { DataPoint } from 'highcharts';
 declare function require(path: string): any;
 const sensorProjectionsEvents = require('../../../assets/js/fr/aquabian/projection/SensorProjectionEvents_pb.js');
 
@@ -77,7 +78,7 @@ export class SensorService {
     public getSensors(): Map<String, Sensor> {
         return this.sensors;
     }
-  
+
 
     private handleSensorProjectionEvent(event: any): void {
         if (event.hasCurrentstateevent()) {
@@ -86,15 +87,21 @@ export class SensorService {
             this.handleAddsensorevent(event.getAddsensorevent());
         } else if (event.hasAddmeasureevent()) {
             this.handleAddmeasureevent(event.getAddmeasureevent());
+        } else if (event.hasRemovemeasureevent()) {
+            this.handleRemovemeasureevent(event.getRemovemeasureevent());
         }
     }
 
     private handleCurrentstateevent(event: any): void {
         console.log('handleCurrentstateevent');
-        this.chart.ref.series.forEach(s =>{
+        this.chart.ref.series.forEach(s => {
             const serie: any = s;
             this.chart.removeSerie(serie.index);
-        } );
+        });
+        this.chart.ref.series.forEach(s => {
+            const serie: any = s;
+            this.chart.removeSerie(serie.index);
+        });
         event.getSensorsList()//
             .map(sensor => this.createSensor(sensor))//
             .forEach(sensor => {
@@ -102,7 +109,11 @@ export class SensorService {
                 this.chart.addSerie({
                     name: sensor.name,
                     id: sensor.id,
-                    data: sensor.measures.map(m => [m.date.getTime(), m.value])
+                    data: sensor.measures.map(m => <DataPoint>{
+                        x: m.date.getTime(),
+                        y: m.value,
+                        id: sensor.id + "_" + m.date.toString()
+                    })
                 });
             });
     }
@@ -115,20 +126,44 @@ export class SensorService {
             id: sensor.id,
             data: []
         });
-     //   this.sensorsSubject.next(this.sensors);
 
     }
+    private handleRemovemeasureevent(event: any): void {
+        console.log('handleRemovemeasureevent');
+        const sensor: Sensor = this.sensors.get(event.getId());
+        if (sensor != null) {
+            const measure: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());
+            sensor.removeMeasure(measure);
+            const index: number = this.getSeriesIndex(event.getId());
+            const id: string = sensor.id + "_" + measure.date.toString();
+            const point = <any>this.chart.ref.get(id);
+            if (point != null) {
+                this.chart.removePoint(point.index, index);
+            } else {
+                console.error('Point ' + id + ' not found');
+                console.error(event.toObject());
+            }
 
+        } else {
+            console.error('Sensor ' + event.getId() + ' not found');
+        }
+
+    }
     private handleAddmeasureevent(event: any): void {
         console.log('handleAddmeasureevent');
         const sensor = this.sensors.get(event.getId());
-        if(sensor != null){
-            const measure: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());
-            sensor.addMeasure(measure);
+        if (sensor != null) {
+            const m: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());
+            sensor.addMeasure(m);
             const index: number = this.getSeriesIndex(event.getId());
-            this.chart.addPoint([measure.date.getTime(), measure.value], index);
-        }else{
-            console.error('Sensor '+event.getId()+' not found');
+            const point: DataPoint = <DataPoint>{
+                x: m.date.getTime(),
+                y: m.value,
+                id: sensor.id + "_" + m.date.toString()
+            }
+            this.chart.addPoint(point, index);
+        } else {
+            console.error('Sensor ' + event.getId() + ' not found');
         }
 
     }
@@ -138,14 +173,11 @@ export class SensorService {
         const name: string = sensor.getName();
         const measures: Array<Measure> = sensor.getMeasuresList()//
             .map(measure => new Measure(measure.getDate().toDate(), measure.getValue()));
-       // measures.forEach(m =>  this.chart.addPoint([m.date.getTime(), m.value]));
-        console.log(sensor.getMeasuresList());
-        console.log(measures); console.log(measures);
         return new Sensor(id, name, measures);
     }
 
-     private getSeriesIndex(id: string): number{
-        return (<any> this.chart.ref.get(id)).index;
-     }
+    private getSeriesIndex(id: string): number {
+        return (<any>this.chart.ref.get(id)).index;
+    }
 
 }

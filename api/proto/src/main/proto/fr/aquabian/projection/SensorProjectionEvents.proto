@@ -10,6 +10,7 @@ message SensorProjectionEvent {
         CurrentStateEvent currentStateEvent =1;
         AddSensorEvent addSensorEvent =2;
         AddMeasureEvent addMeasureEvent =3;
+        RemoveMeasureEvent removeMeasureEvent =4;
     }
 }
 
@@ -21,6 +22,10 @@ message AddSensorEvent {
     Sensor sensor = 1;
 }
 message AddMeasureEvent {
+    string id =1;
+    Measure measure =2;
+}
+message RemoveMeasureEvent {
     string id =1;
     Measure measure =2;
 }
