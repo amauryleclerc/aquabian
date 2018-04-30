@@ -4,6 +4,9 @@ dependencies {
     compile project(':master')
     compile project(':ui')
     compile("org.springframework.boot:spring-boot-starter-web")
+	// https://mvnrepository.com/artifact/org.postgresql/postgresql
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
+
 
 }
 mainClassName = 'fr.aquabian.master.AquabianMasterApp'

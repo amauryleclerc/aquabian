@@ -16,3 +16,16 @@ spring:
       ddl-auto: update
       naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
 
+---
+
+spring:
+    profiles: heroku
+    datasource:
+        platform: postgres
+        url: ${JDBC_DATABASE_URL}
+        username: ${JDBC_DATABASE_USERNAME}
+        password: ${JDBC_DATABASE_PASSWORD}
+        driverClassName: org.postgresql.Driver
+    jpa:
+      database: POSTGRESQL
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
