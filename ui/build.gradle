@@ -25,6 +25,9 @@ task copyFiles(type: Copy) {
 task deleteFiles(type: Delete) {
   delete 'frontend/src/assets/js'
 }
+task installAngular(type: NpmTask) {
+  args = ['install', '-g', '@angular/cli']
+}
 
 task buildFrontend(type: NpmTask) {
   args = ['run-script', 'build']
@@ -32,5 +35,6 @@ task buildFrontend(type: NpmTask) {
 
 npm_install.dependsOn(deleteFiles)
 copyFiles.dependsOn(npm_install)
-buildFrontend.dependsOn(copyFiles)
+installAngular.dependsOn(copyFiles)
+buildFrontend.dependsOn(installAngular)
 jar.dependsOn(buildFrontend)
