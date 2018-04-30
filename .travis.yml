@@ -8,23 +8,12 @@ before_install:
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 
 script:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t registry.heroku.com/aquabian/web .
-    fi
-  - if [ "$TRAVIS_BRANCH" == "aws" ]; then
-    docker build -t aquabian .
-    fi
+  - docker build -t aquabian .
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    echo $DOCKER_PASSWORD | docker login -u "$DOCKER_USERNAME" --password-stdin registry.heroku.com;
-    docker push registry.heroku.com/aquabian/web;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "aws" ]; then
-    docker --version  # document the version travis is using
-    pip install --user awscli # install aws cli w/o sudo
-    export PATH=$PATH:$HOME/.local/bin # put aws in the path
-    eval $(aws ecr get-login --region us-east-1) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-    docker tag aquabian:latest 814640353927.dkr.ecr.us-east-1.amazonaws.com/aquabian:latest
-    docker push 814640353927.dkr.ecr.us-east-1.amazonaws.com/aquabian:latest
-    fi
+  - docker --version  # document the version travis is using
+  - pip install --user awscli # install aws cli w/o sudo
+  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+  - eval $(aws ecr get-login --region us-east-1) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - docker tag aquabian:latest 814640353927.dkr.ecr.us-east-1.amazonaws.com/aquabian:latest
+  - docker push 814640353927.dkr.ecr.us-east-1.amazonaws.com/aquabian:latest
