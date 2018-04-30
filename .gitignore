@@ -4,3 +4,4 @@ build/
 out/
 ui/frontend/node_modules/
 ui/src/main/resources/static/
+ui/frontend/src/assets/js/
