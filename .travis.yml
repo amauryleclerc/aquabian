@@ -14,7 +14,7 @@ script:
   - docker build -t aquabian .
 
 after_success:
-  - echo $(aws ecr get-login --region eu-west-3)
-  - eval $(aws ecr get-login --region eu-west-3) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - echo $(aws ecr get-login --region eu-west-3 --no-include-email)
+  - eval $(aws ecr get-login --region eu-west-3 --no-include-email) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
   - docker tag aquabian:latest 814640353927.dkr.ecr.eu-west-3.amazonaws.com/aquabian:latest
   - docker push 814640353927.dkr.ecr.eu-west-3.amazonaws.com/aquabian:latest
