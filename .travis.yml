@@ -14,7 +14,6 @@ script:
   - docker build -t aquabian .
 
 after_success:
-  - echo $(aws ecr get-login --region eu-west-3 --no-include-email)
-  - eval $(aws ecr get-login --region eu-west-3 --no-include-email) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - echo $(aws ecr get-authorization-token --region eu-west-3 --output text --query 'authorizationData[].authorizationToken' | base64 -d | cut -d: -f2) | docker login -u AWS https://814640353927.dkr.ecr.eu-west-3.amazonaws.com --password-stdin
   - docker tag aquabian:latest 814640353927.dkr.ecr.eu-west-3.amazonaws.com/aquabian:latest
   - docker push 814640353927.dkr.ecr.eu-west-3.amazonaws.com/aquabian:latest
