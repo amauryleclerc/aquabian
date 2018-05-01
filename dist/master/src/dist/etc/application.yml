@@ -1,5 +1,5 @@
 server:
-    port: ${PORT:8080}
+    port: ${PORT:80}
 spring:
   datasource:
     url: jdbc:h2:../db/aquabian;MODE=Oracle;DB_CLOSE_ON_EXIT=FALSE
