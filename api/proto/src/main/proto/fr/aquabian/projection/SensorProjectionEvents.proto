@@ -42,3 +42,21 @@ message Measure{
     double value = 1;
     google.protobuf.Timestamp date = 2;
 }
+
+
+//Query
+message GraphQuery{
+    oneof query {
+        SlidingWindowQuery slidingWindowQuery = 1;
+        PastWindowQuery pastWindowQuery = 2;
+    }
+}
+
+message SlidingWindowQuery{
+    uint64 afterglowSec = 1;
+}
+
+message PastWindowQuery{
+    google.protobuf.Timestamp dateMin = 1;
+    google.protobuf.Timestamp dateMax = 2;
+}

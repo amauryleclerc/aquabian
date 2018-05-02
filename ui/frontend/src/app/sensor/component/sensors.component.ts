@@ -9,13 +9,12 @@ import { Chart } from 'angular-highcharts';
 })
 export class SensorsComponent {
   chart: Chart= null;
-
+  sensors: Array<Sensor> = null;
   range: Number = 0;
   constructor(private sensorService: SensorService) {
     sensorService.getRangeSeconds().subscribe(range => this.range = range, e => console.error(e));
-
     this.chart = sensorService.getChart();
-  
+    this.sensors = sensorService.getSensors();
   }
 
   public rangeChange(event: Number){

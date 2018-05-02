@@ -12,4 +12,6 @@ import java.util.List;
 public interface MeasureRepository extends JpaRepository<MeasureEntity, MeasurePrimaryKey> {
 
     List<MeasureEntity> findByDateAfter(Instant date);
+
+    List<MeasureEntity> findByDateBeforeAndDateAfter(Instant dateMin, Instant dateMax);
 }

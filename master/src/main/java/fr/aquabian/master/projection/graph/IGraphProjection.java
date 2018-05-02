@@ -5,5 +5,5 @@ import io.reactivex.Observable;
 
 public interface IGraphProjection {
 
-    Observable<SensorProjectionEvents.SensorProjectionEvent> getStream(long seconds);
+    Observable<SensorProjectionEvents.SensorProjectionEvent> getStream(final SensorProjectionEvents.GraphQuery graphQuery);
 }

@@ -1,9 +1,19 @@
 <div [chart]="chart"></div>
 
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">Duration in seconds :</span>
+<div class="container">
+  <h3>Options</h3>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon1">Rémanence (sec) :</span>
+    </div>
+    <input type="number" class="form-control" [ngModel]="range" (ngModelChange)="rangeChange($event)" aria-describedby="basic-addon1"
+    />
   </div>
-  <input type="number" class="form-control" [ngModel]="range" (ngModelChange)="rangeChange($event)" aria-describedby="basic-addon1"/>
+  <h3>Capteurs</h3>
+  <ul *ngFor="let sensor of sensors" class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      {{sensor.name}}
+      <span *ngIf="sensor.currentMeasure" class="badge badge-primary badge-pill">{{sensor.currentMeasure.value | number:'0.1-2':'fr'}}°C</span>
+    </li>
+  </ul>
 </div>

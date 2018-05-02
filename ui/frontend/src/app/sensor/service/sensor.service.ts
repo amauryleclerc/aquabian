@@ -29,6 +29,7 @@ const sensorProjectionsEvents = require('../../../assets/js/fr/aquabian/projecti
 export class SensorService {
 
     private sensors: Map<String, Sensor> = new Map<String, Sensor>();
+    private sensorsList: Array<Sensor> = new Array<Sensor>();
     private rangeSubject: Subject<Number> = new BehaviorSubject<Number>(60);
     private chart: Chart = new Chart({
         chart: {
@@ -67,6 +68,10 @@ export class SensorService {
     public getChart(): Chart {
         return this.chart;
     }
+    public getSensors(): Array<Sensor> {
+        return this.sensorsList;
+    }
+
 
     public getRangeSeconds(): Observable<Number> {
         return this.rangeSubject;
@@ -74,11 +79,6 @@ export class SensorService {
     public setRangeSeconds(second: Number): void {
         this.rangeSubject.next(second);
     }
-
-    public getSensors(): Map<String, Sensor> {
-        return this.sensors;
-    }
-
 
     private handleSensorProjectionEvent(event: any): void {
         if (event.hasCurrentstateevent()) {
@@ -94,18 +94,18 @@ export class SensorService {
 
     private handleCurrentstateevent(event: any): void {
         console.log('handleCurrentstateevent');
-        this.chart.ref.series.forEach(s => {
+        const series = [...this.chart.ref.series];
+        series.reverse().forEach(s => {
             const serie: any = s;
             this.chart.removeSerie(serie.index);
         });
-        this.chart.ref.series.forEach(s => {
-            const serie: any = s;
-            this.chart.removeSerie(serie.index);
-        });
+        this.sensorsList.slice(0,this.sensorsList.length -1);
+        this.sensors.clear();
         event.getSensorsList()//
             .map(sensor => this.createSensor(sensor))//
             .forEach(sensor => {
                 this.sensors.set(sensor.id, sensor);
+                this.sensorsList.push(sensor);
                 this.chart.addSerie({
                     name: sensor.name,
                     id: sensor.id,
@@ -121,6 +121,7 @@ export class SensorService {
         console.log('handleAddsensorevent');
         const sensor: Sensor = this.createSensor(event.getSensor());
         this.sensors.set(sensor.id, sensor);
+        this.sensorsList.push(sensor);
         this.chart.addSerie({
             name: sensor.name,
             id: sensor.id,
@@ -151,6 +152,7 @@ export class SensorService {
     }
     private handleAddmeasureevent(event: any): void {
         console.log('handleAddmeasureevent');
+    //   this.chart.ref.series[0].setVisible(false);
         const sensor = this.sensors.get(event.getId());
         if (sensor != null) {
             const m: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());

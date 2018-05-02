@@ -3,6 +3,7 @@ package fr.aquabian.master.config;
 
 import fr.aquabian.api.AquabianConstants;
 import fr.aquabian.api.ISensorProjectionEventStream;
+import fr.aquabian.api.projection.command.SensorProjectionEvents;
 import fr.aquabian.master.handle.ProtoWebSocketHandler;
 import fr.aquabian.master.projection.graph.IGraphProjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(ProtoWebSocketHandler.create(m -> {
-                    long second = Optional.ofNullable(m.get("seconds"))//
+                    SensorProjectionEvents.GraphQuery.Builder query = SensorProjectionEvents.GraphQuery.newBuilder();
+                    Optional.ofNullable(m.get("seconds"))//
                             .filter(l -> l.size() > 0)//
                             .map(l -> l.get(0))//
                             .flatMap(v -> {
@@ -39,8 +41,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
                                     return Optional.empty();
                                 }
                             })//
-                            .orElse(30l);
-                    return graphProjection.getStream(second);
+                            .ifPresent(sec -> query.setSlidingWindowQuery(SensorProjectionEvents.SlidingWindowQuery.newBuilder().setAfterglowSec(sec)));
+                    return graphProjection.getStream(query.build());
                 }),//
                 AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH);
     }
