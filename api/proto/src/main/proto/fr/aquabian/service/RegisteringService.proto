@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package domain.event;
+package service;
 
 option java_package = "fr.aquabian.api.domain.event";
 import "google/protobuf/timestamp.proto";

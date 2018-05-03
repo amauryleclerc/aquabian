@@ -29,3 +29,8 @@ message MeasureAddedEvent  {
     double value = 2;
     google.protobuf.Timestamp date = 3;
 }
+
+message SensorRenamedEvent  {
+    string id = 1;
+    string name = 2;
+}

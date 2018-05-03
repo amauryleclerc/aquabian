@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import * as Highcharts from 'highcharts/highstock';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { SensorCommandService } from './sensor/service/sensor-command.service';
 
 registerLocaleData(localeFr);
 const appRoutes: Routes = [
@@ -40,7 +41,7 @@ Highcharts.setOptions({
     RouterModule.forRoot(appRoutes, { useHash: true }),
     ChartModule
   ],
-  providers: [RxWebsocketClient, SensorService, ConfigService ],
+  providers: [RxWebsocketClient, SensorService, ConfigService, SensorCommandService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

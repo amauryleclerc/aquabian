@@ -51,8 +51,8 @@ public class ArSensor {
     }
 
 
-    @CommandHandler
-    public void addSensor(AquabianCommands.AddMeasureCommand command) {
+     @CommandHandler
+    public void addMeasure(AquabianCommands.AddMeasureCommand command) {
         Timestamp timestamp = Timestamps.fromMillis(Instant.now().toEpochMilli());
         AggregateLifecycle.apply(AquabianEvents.MeasureAddedEvent.newBuilder()//
                 .setId(command.getId())//
@@ -60,6 +60,15 @@ public class ArSensor {
                 .setValue(command.getValue())//
                 .build());
     }
+
+    @CommandHandler
+    public void rename(AquabianCommands.RenameSensorCommand command) {
+        AggregateLifecycle.apply(AquabianEvents.SensorRenamedEvent.newBuilder()//
+                .setId(command.getId())//
+                .setName(command.getName())//
+                .build());
+    }
+
 
     @EventSourcingHandler
     public void on(AquabianEvents.SensorCreatedEvent event) {
@@ -74,4 +83,12 @@ public class ArSensor {
         LOGGER.debug("Add mesure {} from sensor {} - {}", event.getValue(), this.id, this.name);
         this.lastValue = event.getValue();
     }
+
+
+    @EventSourcingHandler
+    public void on(AquabianEvents.SensorRenamedEvent event) {
+        LOGGER.debug("Rename sensor {} - {}", this.id, event.getName());
+        this.name = event.getName();
+    }
+
 }

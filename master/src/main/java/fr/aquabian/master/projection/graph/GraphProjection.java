@@ -51,6 +51,10 @@ public class GraphProjection implements IGraphProjection {
         contexts.forEach(c -> c.handle(event));
     }
 
+    @EventHandler
+    public void handle(AquabianEvents.SensorRenamedEvent event) {
+        contexts.forEach(c -> c.handle(event));
+    }
 
     @Override
     public Observable<SensorProjectionEvents.SensorProjectionEvent> getStream(final SensorProjectionEvents.GraphQuery graphQuery) {

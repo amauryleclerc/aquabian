@@ -22,7 +22,7 @@ import { Measure } from '../model/measure';
 import { ConfigService } from '../../service/config.service';
 import { AquabianConstants } from '../../aquabian.constants';
 import { Chart } from 'angular-highcharts';
-import { DataPoint } from 'highcharts';
+import { DataPoint, SeriesObject } from 'highcharts';
 import { MeasureFilter } from '../model/measureFilter';
 declare function require(path: string): any;
 const sensorProjectionsEvents = require('../../../assets/js/fr/aquabian/projection/SensorProjectionEvents_pb.js');
@@ -90,6 +90,10 @@ export class SensorService {
             this.handleAddmeasureevent(event.getAddmeasureevent());
         } else if (event.hasRemovemeasureevent()) {
             this.handleRemovemeasureevent(event.getRemovemeasureevent());
+        } else if (event.hasRemovemeasureevent()) {
+            this.handleRemovemeasureevent(event.getRemovemeasureevent());
+        } else if (event.hasSensorrenamedevent()) {
+            this.handleSensorrenamedevent(event.getSensorrenamedevent());
         }
     }
 
@@ -100,7 +104,7 @@ export class SensorService {
             const serie: any = s;
             this.chart.removeSerie(serie.index);
         });
-        this.sensorsList.slice(0, this.sensorsList.length - 1);
+        this.sensorsList.splice(0, this.sensorsList.length - 1);
         this.sensors.clear();
         event.getSensorsList()//
             .map(sensor => this.createSensor(sensor))//
@@ -169,6 +173,18 @@ export class SensorService {
             console.error('Sensor ' + event.getId() + ' not found');
         }
 
+    }
+
+    private handleSensorrenamedevent(event: any): void {
+        const sensor = this.sensors.get(event.getId());
+        if (sensor != null) {
+            var serie: SeriesObject;
+            sensor.name = event.getName();
+            const s: any = this.chart.ref.get(event.getId());
+            s.update({name:event.getName()});
+        } else {
+            console.error('Sensor ' + event.getId() + ' not found');
+        }
     }
 
     private createSensor(sensor: any): Sensor {

@@ -1,9 +1,11 @@
 syntax = "proto3";
 
-package domain.command;
+package projection.sensor;
 
 option java_package = "fr.aquabian.api.projection.command";
+
 import "google/protobuf/timestamp.proto";
+import "fr/aquabian/domain/event/AquabianEvents.proto";
 
 message SensorProjectionEvent {
     oneof event {
@@ -11,6 +13,7 @@ message SensorProjectionEvent {
         AddSensorEvent addSensorEvent =2;
         AddMeasureEvent addMeasureEvent =3;
         RemoveMeasureEvent removeMeasureEvent =4;
+        domain.event.SensorRenamedEvent sensorRenamedEvent =5;
     }
 }
 

@@ -4,6 +4,7 @@ import { SensorService } from '../service/sensor.service';
 import { Sensor } from '../model/sensor';
 import { Chart } from 'angular-highcharts';
 import { MeasureFilter } from '../model/measureFilter';
+import { SensorCommandService } from '../service/sensor-command.service';
 
 @Component({
   templateUrl: './sensors.component.html'
@@ -16,7 +17,7 @@ export class SensorsComponent {
   afterglow: number = 60;
   dateMin: string = this.convertDateToString(new Date(new Date().getTime()-60000));
   dateMax: string = this.convertDateToString(new Date());
-  constructor(private sensorService: SensorService) {
+  constructor(private sensorService: SensorService, private sensorCommandService: SensorCommandService) {
     sensorService.getMeasureFilter().subscribe(measureFilter => this.onFilterChange(measureFilter), e => console.error(e));
     this.chart = sensorService.getChart();
     this.sensors = sensorService.getSensors();
@@ -57,6 +58,12 @@ export class SensorsComponent {
   public onDateMaxChange(event) {
     console.log("Date max change to " + event.target.value);
     this.sensorService.setMeasureFilter(MeasureFilter.createForPastWindow(new Date(this.dateMin),new Date(event.target.value)));
+  }
+
+  public renameSensor(id: string, event){
+    console.log(event);
+    console.log( this.sensorCommandService);
+    this.sensorCommandService.renameSensor(id, event.target.value).subscribe(e => console.log(e), e => console.error(e));
   }
 
 

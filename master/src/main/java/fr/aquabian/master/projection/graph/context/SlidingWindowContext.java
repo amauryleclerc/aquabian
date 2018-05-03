@@ -97,8 +97,16 @@ public class SlidingWindowContext implements IGraphContext {
                 ).build());
 
     }
-
-
+    @Override
+    public void handle(AquabianEvents.SensorRenamedEvent event) {
+        if(measures.asMap().keySet().stream().map(k -> k.getSensor().getId()).anyMatch(k -> event.getId().equals(event.getId()))){
+            eventSubject.onNext(SensorProjectionEvents.SensorProjectionEvent.newBuilder()//
+                    .setSensorRenamedEvent(AquabianEvents.SensorRenamedEvent.newBuilder()//
+                            .setId(event.getId())//
+                            .setName(event.getName())//
+                    ).build());
+        }
+    }
     private Single<SensorProjectionEvents.SensorProjectionEvent> getCurrentState() {
         return GraphUtils.getCurrentState(() -> measureRepository.findByDateAfter(Instant.now().minusSeconds(second)),//
                 (s, m) -> measures.put(new MeasurePrimaryKey(s, ProtoUtils.convertTimestampProtoToInstant(m.getDate())), m));//

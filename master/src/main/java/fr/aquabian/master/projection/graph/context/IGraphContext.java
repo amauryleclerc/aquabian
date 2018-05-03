@@ -23,5 +23,7 @@ public interface IGraphContext {
     default void handle(AquabianEvents.MeasureAddedEvent event) {
     }
 
+    default void handle(AquabianEvents.SensorRenamedEvent event) {
+    }
 
 }

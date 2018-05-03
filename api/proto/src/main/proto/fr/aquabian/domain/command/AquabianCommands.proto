@@ -8,9 +8,10 @@ import "google/protobuf/timestamp.proto";
 message AquabianCommand {
     oneof command {
         CreateDeviceCommand createDeviceCommand =1;
-        AddSensorToDeviceCommand AddSensorToDeviceCommand =2;
-        CreateSensorCommand CreateSensorCommand =3;
-        AddMeasureCommand AddMeasureCommand =4;
+        AddSensorToDeviceCommand addSensorToDeviceCommand =2;
+        CreateSensorCommand createSensorCommand =3;
+        AddMeasureCommand addMeasureCommand =4;
+        RenameSensorCommand renameSensorCommand =5;
     }
 }
 
@@ -39,5 +40,8 @@ message AddMeasureCommand {
     google.protobuf.Timestamp date = 3;
 }
 
-
+message RenameSensorCommand {
+    string id = 1;
+    string name = 2;
+}
 

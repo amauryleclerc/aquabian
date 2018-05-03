@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @ProcessingGroup("PersistenceProjection")
@@ -27,6 +29,9 @@ public class PersisitenceProjection {
     private final DeviceRepository deviceRepository;
     private final SensorRepository sensorRepository;
     private final MeasureRepository measureRepository;
+
+    private final Map<String, MeasureEntity>  lastMeasureMap = new HashMap<>();
+    private final Map<String, Boolean>  lastMeasureIsSavedMap = new HashMap<>();
 
     @Autowired
     private PersisitenceProjection(final DeviceRepository deviceRepository,//
@@ -67,15 +72,38 @@ public class PersisitenceProjection {
     }
 
     @EventHandler
-    public void handle(AquabianEvents.MeasureAddedEvent event) {
+    public  void handle(AquabianEvents.MeasureAddedEvent event) {
         LOGGER.info("Add mesure {} from sensor {} at {}", event.getValue(), event.getId(), ProtoUtils.convertTimestampProtoToInstant(event.getDate()));
         SensorEntity sensor = sensorRepository.getOne(event.getId());
         MeasureEntity measure = new MeasureEntity();
         measure.setDate(Instant.ofEpochSecond(event.getDate().getSeconds(), event.getDate().getNanos()));
         measure.setSensor(sensor);
         measure.setValue(event.getValue());
-        measureRepository.saveAndFlush(measure);
+        MeasureEntity lastMeasure = lastMeasureMap.get(event.getId());
+        if(lastMeasure == null){
+            lastMeasureMap.put(event.getId(),measure);
+            lastMeasureIsSavedMap.put(event.getId(),true);
+            measureRepository.saveAndFlush(measure);
+        } else if(lastMeasure.getValue().equals(measure.getValue())){
+            lastMeasureMap.put(event.getId(),measure);
+            lastMeasureIsSavedMap.put(event.getId(),false);
+        } else if(lastMeasureIsSavedMap.get(event.getId())){
+            lastMeasureMap.put(event.getId(),measure);
+            measureRepository.saveAndFlush(measure);
+        }else{
+            lastMeasureMap.put(event.getId(),measure);
+            measureRepository.saveAndFlush(lastMeasure);
+            measureRepository.saveAndFlush(measure);
+        }
+
     }
 
+    @EventHandler
+    public void handle(AquabianEvents.SensorRenamedEvent event) {
+        LOGGER.info("Sensor {} renamed {}", event.getId(), event.getName());
+        SensorEntity sensor = sensorRepository.getOne(event.getId());
+        sensor.setName(event.getName());
+        sensorRepository.saveAndFlush(sensor);
+    }
 
 }

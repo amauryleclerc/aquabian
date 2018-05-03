@@ -39,7 +39,7 @@
           <span *ngIf="sensor.minMeasure" class="badge badge-info badge-pill">{{sensor.minMeasure.value | number:'0.1-2':'fr'}}°C</span>
           <span *ngIf="sensor.maxMeasure" class="badge badge-danger badge-pill">{{sensor.maxMeasure.value | number:'0.1-2':'fr'}}°C</span>
       </div>
-
+      <input type="text" (change)="renameSensor(sensor.id,$event) " />
       <span *ngIf="sensor.currentMeasure" class="badge badge-primary badge-pill">{{sensor.currentMeasure.value | number:'0.1-2':'fr'}}°C</span>
         
     </li>
