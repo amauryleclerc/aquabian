@@ -5,6 +5,8 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/repeat';
+import 'rxjs/add/operator/repeatWhen';
 import 'rxjs/add/operator/do';
 
 @Injectable()
@@ -32,8 +34,9 @@ export class RxWebsocketClient {
                 };
                 fileReader.readAsArrayBuffer(e.data);
             }))//
-            .do(event => null, error => console.error(error))//
-            .retryWhen(obs => obs.delay(5000));
+            .do(event => null, error => console.error(error), () => console.log("stream closed"))//
+            .repeatWhen(obs => obs.delay(2000).do(v => console.log('retry after stream closed')))
+            .retryWhen(obs => obs.delay(2000).do(v => console.log('retry after stream error')));
     }
 
 }

@@ -23,7 +23,7 @@
     "@angular/router": "^5.2.0",
     "@ng-bootstrap/ng-bootstrap": "^1.1.2",
     "angular-highcharts": "^5.2.12",
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.1.1",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "google-protobuf": "^3.5.0",

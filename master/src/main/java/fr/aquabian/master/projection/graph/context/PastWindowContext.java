@@ -21,6 +21,6 @@ public class PastWindowContext implements IGraphContext {
     }
     @Override
     public Observable<SensorProjectionEvents.SensorProjectionEvent> getStream() {
-        return GraphUtils.getCurrentState(() -> measureRepository.findByDateBeforeAndDateAfter(dateMin,dateMax)).toObservable().concatWith(Observable.never());
+        return GraphUtils.getCurrentState(() -> measureRepository.findByDateBetween(dateMin,dateMax)).toObservable().concatWith(Observable.never());
     }
 }

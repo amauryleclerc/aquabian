@@ -10,6 +10,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/repeatWhen';
+import 'rxjs/add/operator/repeat';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/concat';
@@ -22,6 +23,7 @@ import { ConfigService } from '../../service/config.service';
 import { AquabianConstants } from '../../aquabian.constants';
 import { Chart } from 'angular-highcharts';
 import { DataPoint } from 'highcharts';
+import { MeasureFilter } from '../model/measureFilter';
 declare function require(path: string): any;
 const sensorProjectionsEvents = require('../../../assets/js/fr/aquabian/projection/SensorProjectionEvents_pb.js');
 
@@ -30,7 +32,7 @@ export class SensorService {
 
     private sensors: Map<String, Sensor> = new Map<String, Sensor>();
     private sensorsList: Array<Sensor> = new Array<Sensor>();
-    private rangeSubject: Subject<Number> = new BehaviorSubject<Number>(60);
+    private measureFilterSubject: Subject<MeasureFilter> = new BehaviorSubject<MeasureFilter>(MeasureFilter.createForSlidingWindow(60));
     private chart: Chart = new Chart({
         chart: {
             type: 'line'
@@ -55,13 +57,12 @@ export class SensorService {
     });
     constructor(private websocketClient: RxWebsocketClient, private zone: NgZone, private configService: ConfigService) {
 
-        this.rangeSubject.debounceTime(500)//
+        this.measureFilterSubject.debounceTime(500)//
             .distinctUntilChanged()//
-            .switchMap(second => websocketClient.create(configService.getWsBaseUrl() + AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH + "?seconds=" + second))//
-            .repeatWhen(obs => obs.delay(5000).do(v => console.log('repeat')))
+            .switchMap(filter => websocketClient.create(configService.getWsBaseUrl() + AquabianConstants.SENSOR_PROJECTION_EVENT_STREAM_PATH + filter.getQuery()))//
             .map(e => sensorProjectionsEvents.SensorProjectionEvent.deserializeBinary(e))//
             .subscribe(e => this.handleSensorProjectionEvent(e)
-                , e => console.error(e));
+                , e => console.error(e), () => console.error("complete"));
 
     }
 
@@ -73,11 +74,11 @@ export class SensorService {
     }
 
 
-    public getRangeSeconds(): Observable<Number> {
-        return this.rangeSubject;
+    public getMeasureFilter(): Observable<MeasureFilter> {
+        return this.measureFilterSubject;
     }
-    public setRangeSeconds(second: Number): void {
-        this.rangeSubject.next(second);
+    public setMeasureFilter(filter: MeasureFilter): void {
+        this.measureFilterSubject.next(filter);
     }
 
     private handleSensorProjectionEvent(event: any): void {
@@ -99,7 +100,7 @@ export class SensorService {
             const serie: any = s;
             this.chart.removeSerie(serie.index);
         });
-        this.sensorsList.slice(0,this.sensorsList.length -1);
+        this.sensorsList.slice(0, this.sensorsList.length - 1);
         this.sensors.clear();
         event.getSensorsList()//
             .map(sensor => this.createSensor(sensor))//
@@ -152,7 +153,7 @@ export class SensorService {
     }
     private handleAddmeasureevent(event: any): void {
         console.log('handleAddmeasureevent');
-    //   this.chart.ref.series[0].setVisible(false);
+        //   this.chart.ref.series[0].setVisible(false);
         const sensor = this.sensors.get(event.getId());
         if (sensor != null) {
             const m: Measure = new Measure(event.getMeasure().getDate().toDate(), event.getMeasure().getValue());

@@ -2,6 +2,7 @@ package fr.aquabian.master.projection.persistence.entity;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 public class MeasurePrimaryKey implements Serializable {
     public MeasurePrimaryKey() {
@@ -23,5 +24,21 @@ public class MeasurePrimaryKey implements Serializable {
 
     public Instant getDate() {
         return date;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MeasurePrimaryKey that = (MeasurePrimaryKey) o;
+        return Objects.equals(sensor, that.sensor) &&
+                Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(sensor, date);
     }
 }

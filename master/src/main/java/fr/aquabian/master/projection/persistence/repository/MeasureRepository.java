@@ -13,5 +13,5 @@ public interface MeasureRepository extends JpaRepository<MeasureEntity, MeasureP
 
     List<MeasureEntity> findByDateAfter(Instant date);
 
-    List<MeasureEntity> findByDateBeforeAndDateAfter(Instant dateMin, Instant dateMax);
+    List<MeasureEntity> findByDateBetween(Instant dateMin, Instant dateMax);
 }
