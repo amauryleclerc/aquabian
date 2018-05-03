@@ -14,7 +14,7 @@ export class SensorsComponent {
   measureFilter: MeasureFilter = null;
   filterType: string = "pastWindow";
   afterglow: number = 60;
-  dateMin: string = this.convertDateToString(new Date());
+  dateMin: string = this.convertDateToString(new Date(new Date().getTime()-60000));
   dateMax: string = this.convertDateToString(new Date());
   constructor(private sensorService: SensorService) {
     sensorService.getMeasureFilter().subscribe(measureFilter => this.onFilterChange(measureFilter), e => console.error(e));

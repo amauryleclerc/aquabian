@@ -4,12 +4,12 @@
   <div class="custom-control custom-radio">
     <input type="radio" id="pastWindow" name="customRadio" class="custom-control-input" value="pastWindow" [ngModel]="filterType"
       (change)="onRadioChange($event)">
-    <label class="custom-control-label" for="pastWindow">Past</label>
+    <label class="custom-control-label" for="pastWindow">Mode requête dans le passé</label>
   </div>
   <div class="custom-control custom-radio">
     <input type="radio" id="slidingWindow" name="customRadio" class="custom-control-input" value="slidingWindow" [ngModel]="filterType"
       (change)="onRadioChange($event)">
-    <label class="custom-control-label" for="slidingWindow">Afterglow</label>
+    <label class="custom-control-label" for="slidingWindow">Mode temps réel</label>
   </div>
 
   <div class="input-group mb-3" *ngIf="filterType == 'slidingWindow'">
@@ -34,8 +34,14 @@
   <h3>Capteurs</h3>
   <ul *ngFor="let sensor of sensors" class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center">
-      {{sensor.name}}
+      <div>
+          <h3>{{sensor.name}}</h3>
+          <span *ngIf="sensor.minMeasure" class="badge badge-info badge-pill">{{sensor.minMeasure.value | number:'0.1-2':'fr'}}°C</span>
+          <span *ngIf="sensor.maxMeasure" class="badge badge-danger badge-pill">{{sensor.maxMeasure.value | number:'0.1-2':'fr'}}°C</span>
+      </div>
+
       <span *ngIf="sensor.currentMeasure" class="badge badge-primary badge-pill">{{sensor.currentMeasure.value | number:'0.1-2':'fr'}}°C</span>
+        
     </li>
   </ul>
 
