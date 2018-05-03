@@ -10,7 +10,7 @@ import {SensorService} from './sensor/service/sensor.service';
 import { SensorsComponent } from './sensor/component/sensors.component';
 import { ConfigService } from './service/config.service';
 import { FormsModule } from '@angular/forms';
-import Highcharts = require('highcharts');
+import * as Highcharts from 'highcharts/highstock';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 

@@ -7,6 +7,7 @@ import fr.aquabian.master.projection.persistence.entity.SensorEntity;
 import fr.aquabian.master.projection.persistence.repository.DeviceRepository;
 import fr.aquabian.master.projection.persistence.repository.MeasureRepository;
 import fr.aquabian.master.projection.persistence.repository.SensorRepository;
+import fr.aquabian.toolkit.ProtoUtils;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
@@ -67,7 +68,7 @@ public class PersisitenceProjection {
 
     @EventHandler
     public void handle(AquabianEvents.MeasureAddedEvent event) {
-        LOGGER.info("Add mesure {} from sensor {} at {}", event.getValue(), event.getValue(), event.getId(), event.getDate());
+        LOGGER.info("Add mesure {} from sensor {} at {}", event.getValue(), event.getId(), ProtoUtils.convertTimestampProtoToInstant(event.getDate()));
         SensorEntity sensor = sensorRepository.getOne(event.getId());
         MeasureEntity measure = new MeasureEntity();
         measure.setDate(Instant.ofEpochSecond(event.getDate().getSeconds(), event.getDate().getNanos()));
