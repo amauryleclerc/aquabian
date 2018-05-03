@@ -29,3 +29,7 @@ spring:
     jpa:
       database: POSTGRESQL
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: false
+      hibernate:
+        ddl-auto: create-drop
+        naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
