@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-@ProcessingGroup("GraphProjection")
+//@ProcessingGroup("GraphProjection")
 public class GraphProjection implements IGraphProjection {
 
 
@@ -48,6 +48,8 @@ public class GraphProjection implements IGraphProjection {
 
     @EventHandler
     public void handle(AquabianEvents.MeasureAddedEvent event) {
+
+        System.err.println("Measure !!");
         contexts.forEach(c -> c.handle(event));
     }
 
