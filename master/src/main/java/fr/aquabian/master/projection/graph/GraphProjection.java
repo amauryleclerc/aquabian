@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-//@ProcessingGroup("GraphProjection")
+@ProcessingGroup("GraphProjection")
 public class GraphProjection implements IGraphProjection {
 
 

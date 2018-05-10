@@ -14,4 +14,6 @@ spring:
     hibernate:
       ddl-auto: update
       naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
-
+axon:
+  amqp:
+    exchange: EventExchange

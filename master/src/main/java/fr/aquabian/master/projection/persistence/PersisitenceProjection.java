@@ -79,22 +79,24 @@ public class PersisitenceProjection {
         measure.setDate(Instant.ofEpochSecond(event.getDate().getSeconds(), event.getDate().getNanos()));
         measure.setSensor(sensor);
         measure.setValue(event.getValue());
-        MeasureEntity lastMeasure = lastMeasureMap.get(event.getId());
-        if(lastMeasure == null){
-            lastMeasureMap.put(event.getId(),measure);
-            lastMeasureIsSavedMap.put(event.getId(),true);
-            measureRepository.saveAndFlush(measure);
-        } else if(lastMeasure.getValue().equals(measure.getValue())){
-            lastMeasureMap.put(event.getId(),measure);
-            lastMeasureIsSavedMap.put(event.getId(),false);
-        } else if(lastMeasureIsSavedMap.get(event.getId())){
-            lastMeasureMap.put(event.getId(),measure);
-            measureRepository.saveAndFlush(measure);
-        }else{
-            lastMeasureMap.put(event.getId(),measure);
-            measureRepository.saveAndFlush(lastMeasure);
-            measureRepository.saveAndFlush(measure);
-        }
+        measureRepository.saveAndFlush(measure);
+        //TODO
+//        MeasureEntity lastMeasure = lastMeasureMap.get(event.getId());
+//        if(lastMeasure == null){
+//            lastMeasureMap.put(event.getId(),measure);
+//            lastMeasureIsSavedMap.put(event.getId(),true);
+//            measureRepository.saveAndFlush(measure);
+//        } else if(lastMeasure.getValue().equals(measure.getValue())){
+//            lastMeasureMap.put(event.getId(),measure);
+//            lastMeasureIsSavedMap.put(event.getId(),false);
+//        } else if(lastMeasureIsSavedMap.get(event.getId())){
+//            lastMeasureMap.put(event.getId(),measure);
+//            measureRepository.saveAndFlush(measure);
+//        }else{
+//            lastMeasureMap.put(event.getId(),measure);
+//            measureRepository.saveAndFlush(lastMeasure);
+//            measureRepository.saveAndFlush(measure);
+//        }
 
     }
 
