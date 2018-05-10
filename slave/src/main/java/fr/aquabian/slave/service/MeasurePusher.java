@@ -65,6 +65,7 @@ public class MeasurePusher {
                         Observable.fromIterable(sensorManager.getSensors())//
                                 .subscribeOn(Schedulers.computation())//
                                 .flatMap(s -> Observable.interval(10, TimeUnit.SECONDS)//
+                                        .startWith(0L)//
                                         .map(d -> s.getMeasure())
                                         .filter(Optional::isPresent))
                                 .map(Optional::get)//
